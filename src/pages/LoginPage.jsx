@@ -30,7 +30,23 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 68px;
+  img {
+    margin-bottom: 30px;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  p {
+    font-family: 'Lexend Deca', sans-serif;
+    margin-top: 25px;
+    font-size: 14px;
+    color: #52B6FF;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;
+
 
 const Logo = styled.img`
   margin-bottom: 30px;
@@ -44,7 +60,7 @@ const LoginForm = styled.form`
 const InputLogin = styled.input`
   width: 303px;
   height: 45px;
-  border: 2px solid #d5d5d5;
+  border: 2px solid #D5D5D5;
   border-radius: 5px;
   margin-bottom: 6px;
   outline: none;
@@ -52,20 +68,23 @@ const InputLogin = styled.input`
   font-size: 20px;
   padding-left: 11px;
   &::placeholder {
-    color: #dbdbdb;
+    color: #DBDBDB;
   }
-`;
+`
 
 const LoginButton = styled.button`
   height: 45px;
   border: none;
   border-radius: 5px;
-  background-color: #52b6ff;
-  color: #ffffff;
+  background-color: #52B6FF;
+  color: #FFFFFF;
   font-family: 'Lexend Deca', sans-serif;
   font-size: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-`;
+`
 
 const SignUpLink = styled.p`
   font-family: 'Lexend Deca', sans-serif;
@@ -75,3 +94,5 @@ const SignUpLink = styled.p`
   text-decoration: underline;
   cursor: pointer;
 `;
+
+export {Container, InputLogin, LoginButton}
