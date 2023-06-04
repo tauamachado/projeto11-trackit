@@ -1,17 +1,21 @@
-import React from 'react';
+import { React, useContext } from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { AuthContext } from '../AuthContext';
 
 const FooterMenu = () => {
   const navigate = useNavigate();
+  const {habitsToday} = useContext(AuthContext)
+	const totalHabits = habitsToday.length
+	const completedHabits = habitsToday.filter(h => h.done).length
 
   return (
     <ContainerMenu>
       <h2 onClick={() => navigate('/habitos')}>Hábitos</h2>
       <div onClick={() => navigate('/hoje')}>
         <CircularProgressbar
-          value={50}
+          value={completedHabits/totalHabits*100}
           text={<tspan dominantBaseline="middle">Hoje</tspan>}
           background
           backgroundPadding={6}
