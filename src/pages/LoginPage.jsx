@@ -1,20 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ThreeDots } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logoTrackIt from '../assets/logoTrackIt.png';
+import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai';
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isClicked, setIsClicked] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.length !== 0) {
+      navigate('/hoje');
+    }
+  }, [navigate]);
 
   function login(e) {
     e.preventDefault();
-    const URL =
-      'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
+    const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
     const body = { email, password };
     setIsClicked(true);
 
@@ -22,8 +29,8 @@ export default function LoginPage() {
     promise
       .then((res) => {
         setIsClicked(false);
-        localStorage.setItem('Image', res.data.image)
-        localStorage.setItem('Token', res.data.token)
+        localStorage.setItem('Image', res.data.image);
+        localStorage.setItem('Token', res.data.token);
         navigate('/hoje');
       })
       .catch((err) => {
@@ -44,29 +51,26 @@ export default function LoginPage() {
           required
           disabled={isClicked}
         />
-        <InputLogin
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          type="password"
-          placeholder="senha"
-          required
-          disabled={isClicked}
-        />
-        <LoginButton
-          clicked={isClicked}
-          type="submit"
-          disabled={isClicked}
-        >
-          {isClicked ? (
-            <ThreeDots color="#FFFFFF" />
+        <div>
+          <InputLogin
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type={showPassword ? 'text' : 'password'}
+            placeholder="senha"
+            required
+            disabled={isClicked}
+          />
+          {showPassword ? (
+            <AiOutlineEyeInvisible onClick={() => setShowPassword(!showPassword)} />
           ) : (
-            'Entrar'
+            <AiOutlineEye onClick={() => setShowPassword(!showPassword)} />
           )}
+        </div>
+        <LoginButton clicked={isClicked} type="submit" disabled={isClicked}>
+          {isClicked ? <ThreeDots color="#FFFFFF" /> : 'Entrar'}
         </LoginButton>
       </form>
-      <p onClick={() => navigate('/cadastro')}>
-        Não tem uma conta? Cadastre-se!
-      </p>
+      <p onClick={() => navigate('/cadastro')}>Não tem uma conta? Cadastre-se!</p>
     </Container>
   );
 }
@@ -85,6 +89,16 @@ const Container = styled.div`
   form {
     display: flex;
     flex-direction: column;
+    div {
+      position: relative;
+      svg {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 25px;
+        color: #d5d5d5;
+      }
+    }
   }
   p {
     font-family: 'Lexend Deca', sans-serif;
