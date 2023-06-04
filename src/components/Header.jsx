@@ -25,6 +25,7 @@ const HeaderContainer = styled.div`
     justify-content: space-between;
     color: #FFFFFF;
     box-shadow: 0px 4 px 4px rgba(0, 0, 0, 0.15);
+    z-index: 10;
     h1 {
         font-family: 'Playball', cursive;
         font-size: 39px;

@@ -1,52 +1,119 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import FooterMenu from '../components/FooterMenu';
 import Header from '../components/Header';
 import { weekdays } from '../constants/weekdays';
-import dump from '../assets/dump.svg';
+import axios from 'axios';
+import { AuthContext } from '../AuthContext';
+import { ThreeDots } from 'react-loader-spinner';
+import CreatedHabits from '../components/CreatedHabits';
+import Footer from '../components/FooterMenu';
 
-const HabitsPage = () => {
+export default function HabitsPage() {
   const [clickCreate, setClickCreate] = useState(false);
   const [name, setName] = useState('');
   const [days, setDays] = useState([]);
+  const { token } = useContext(AuthContext);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [habits, setHabits] = useState([]);
+  const [habitDelete, setHabitDelete] = useState(false);
+
+  useEffect(() => {
+    const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits';
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    const promise = axios.get(URL, config);
+    promise.then(res => setHabits(res.data));
+    promise.catch(err => console.log(err.response.data.message));
+  }, [habits, habitDelete]);
+
+  function selectDays(req) {
+    if (!days.some(props => props === req)) {
+      const newDays = [...days, req];
+      setDays(newDays);
+    } else {
+      const removeDays = days.filter(props => props !== req);
+      setDays(removeDays);
+    }
+  }
+
+  function createHabit() {
+    setIsDisabled(true);
+    const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits';
+    const body = { name, days };
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    const promise = axios.post(URL, body, config);
+    promise.then(() => {
+      setIsDisabled(false);
+      setName('');
+      setDays([]);
+      setClickCreate(false);
+    });
+    promise.catch(err => {
+      alert(err.response.data);
+      setIsDisabled(false);
+    });
+  }
 
   return (
-    <ContainerHabits>
+    <ContainerHabits habits={habits}>
       <Header />
       <MyHabits>
         <h1>Meus hábitos</h1>
         <button onClick={() => setClickCreate(true)}>+</button>
       </MyHabits>
-      <CreateHabit isClick={clickCreate}>
+      <CreateHabit isClick={clickCreate} isDisabled={isDisabled}>
         <input
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
           placeholder="nome do hábito"
+          disabled={isDisabled}
         />
         <div>
           {weekdays.map((w, index) => (
-            <button key={index}>{w[0]}</button>
+            <WeekdaysButton
+              key={index}
+              days={days}
+              index={index}
+              onClick={() => selectDays(index)}
+              disabled={isDisabled}
+            >
+              {w[0]}
+            </WeekdaysButton>
           ))}
         </div>
         <p onClick={() => setClickCreate(false)}>Cancelar</p>
-        <button>Salvar</button>
+        <button onClick={createHabit} disabled={isDisabled}>
+          {isDisabled ? <ThreeDots color="#FFFFFF" width="50px" /> : 'Salvar'}
+        </button>
       </CreateHabit>
-      <CreatedHabits>
-        <p>Ler 1 capítulo de livro</p>
-        <div>
-          {weekdays.map((w, index) => (
-            <button key={index}>{w[0]}</button>
-          ))}
-        </div>
-        <img src={dump} alt="" />
-      </CreatedHabits>
-      <p>
-        Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
-      </p>
+      {habits.map(h => (
+        <CreatedHabits
+          key={h.id}
+          habit={h}
+          habitDelete={habitDelete}
+          setHabitDelete={setHabitDelete}
+        />
+      ))}
+      {habits.length === 0 && (
+        <p>
+          Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
+        </p>
+      )}
+      <Footer />
       <FooterMenu />
     </ContainerHabits>
   );
-};
+}
 
 const ContainerHabits = styled.div`
   background-color: #f2f2f2;
@@ -54,32 +121,40 @@ const ContainerHabits = styled.div`
   height: 100vh;
   padding-left: 17px;
   padding-right: 18px;
+
   > p {
+    display: ${props => (props.habits.length !== 0 ? 'none' : '')};
     margin-top: 28px;
     font-family: 'Lexend Deca', sans-serif;
     font-size: 18px;
     line-height: 22px;
     color: #666666;
   }
+
+  footer {
+    height: 120px;
+  }
 `;
 
 const MyHabits = styled.div`
   display: flex;
   justify-content: space-between;
+
   h1 {
     padding-top: 98px;
     font-size: 23px;
     font-family: 'Lexend Deca', sans-serif;
-    color: #126BA5;
+    color: #126ba5;
   }
+
   button {
     margin-top: 92px;
     width: 40px;
     height: 35px;
     border: none;
-    background-color: #52B6FF;
+    background-color: #52b6ff;
     border-radius: 5px;
-    color: #FFFFFF;
+    color: #ffffff;
     font-family: 'Lexend Deca', sans-serif;
     font-size: 26px;
   }
@@ -89,48 +164,42 @@ const CreateHabit = styled.div`
   margin-top: 20px;
   width: 340px;
   height: 180px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 5px;
   position: relative;
   display: ${props => (props.isClick ? '' : 'none')};
+
   input {
     margin-top: 18px;
     margin-left: 19px;
     width: 303px;
     height: 45px;
-    border: 1px solid #D5D5D5;
+    border: 1px solid #d5d5d5;
     border-radius: 5px;
     font-family: 'Lexend Deca', sans-serif;
     font-size: 20px;
     outline: none;
     padding-left: 11px;
+
     &::placeholder {
-      color: #DBDBDB;
+      color: #dbdbdb;
     }
   }
+
   div {
     margin-left: 19px;
     margin-top: 8px;
-    button {
-      font-family: 'Lexend Deca', sans-serif;
-      margin-right: 4px;
-      width: 30px;
-      height: 30px;
-      border: 1px solid #D5D5D5;
-      border-radius: 5px;
-      background-color: #FFFFFF;
-      color: #DBDBDB;
-      font-size: 20px;
-    }
   }
+
   p {
     position: absolute;
     bottom: 23px;
     right: 123px;
     font-family: 'Lexend Deca', sans-serif;
     font-size: 16px;
-    color: #52B6FF;
+    color: #52b6ff;
   }
+
   > button {
     font-family: 'Lexend Deca', sans-serif;
     position: absolute;
@@ -140,47 +209,26 @@ const CreateHabit = styled.div`
     height: 35px;
     border-radius: 5px;
     border: none;
-    background-color: #52B6FF;
-    color: #FFFFFF;
+    background-color: #52b6ff;
+    opacity: ${props => (props.isDisabled ? '0.7' : '1')};
+    color: #ffffff;
     font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: ${props => (props.isDisabled ? '23px' : '')};
+    padding-bottom: ${props => (props.isDisabled ? '8px' : '')};
   }
 `;
 
-const CreatedHabits = styled.div`
-  width: 340px;
-  height: 91px;
-  background-color: #FFFFFF;
-  margin-top: 10px;
+const WeekdaysButton = styled.button`
+  font-family: 'Lexend Deca', sans-serif;
+  margin-right: 4px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #d5d5d5;
   border-radius: 5px;
-  position: relative;
-  p {
-    font-family: 'Lexend Deca', sans-serif;
-    font-size: 20px;
-    margin-left: 15px;
-    padding-top: 13px;
-    color: #666666;
-  }
-  div {
-    margin-left: 14px;
-    margin-top: 8px;
-    button {
-      font-family: 'Lexend Deca', sans-serif;
-      margin-right: 4px;
-      width: 30px;
-      height: 30px;
-      border: 1px solid #D5D5D5;
-      border-radius: 5px;
-      background-color: #FFFFFF;
-      color: #DBDBDB;
-      font-size: 20px;
-    }
-  }
-  img {
-    position: absolute;
-    top: 11px;
-    right: 10px;
-    cursor: pointer;
-  }
+  background-color: ${props => (props.days.includes(props.index) ? '#cfcfcf' : '#ffffff')};
+  color: ${props => (props.days.includes(props.index) ? '#ffffff' : '#dbdbdb')};
+  font-size: 20px;
 `;
-
-export default HabitsPage;

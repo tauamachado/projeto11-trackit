@@ -42,6 +42,7 @@ const ContainerMenu = styled.div`
   color: #000000;
   align-items: center;
   justify-content: space-between;
+  z-index: 10;
   h2 {
     font-family: 'Lexend Deca', sans-serif;
     font-size: 18px;

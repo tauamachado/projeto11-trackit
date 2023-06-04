@@ -1,5 +1,5 @@
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
-import { useContext, useState } from 'react';
 import { ThreeDots } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -15,19 +15,20 @@ export default function LoginPage() {
 
   function login(e) {
     e.preventDefault();
-    const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
+    const URL =
+      'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
     const body = { email, password };
     setIsClicked(true);
 
-    axios
-      .post(URL, body)
-      .then(res => {
+    const promise = axios.post(URL, body);
+    promise
+      .then((res) => {
         setIsClicked(false);
         setImage(res.data.image);
         setToken(res.data.token);
         navigate('/hoje');
       })
-      .catch(err => {
+      .catch((err) => {
         alert(err.response.data.message);
         setIsClicked(false);
       });
@@ -35,25 +36,52 @@ export default function LoginPage() {
 
   return (
     <Container onSubmit={login}>
-      <img src={logoTrackIt} alt='Logo' />
+      <img src={logoTrackIt} alt="" />
       <form>
-        <InputLogin value={email} onChange={e => setEmail(e.target.value)} type='email' placeholder='email' required disabled={isClicked} />
-        <InputLogin value={password} onChange={e => setPassword(e.target.value)} type='password' placeholder='senha' required disabled={isClicked} />
-        <LoginButton clicked={isClicked} type='submit' disabled={isClicked}>
-          {isClicked ? <ThreeDots color='#FFFFFF' /> : 'Entrar'}
+        <InputLogin
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          type="email"
+          placeholder="email"
+          required
+          disabled={isClicked}
+        />
+        <InputLogin
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+          placeholder="senha"
+          required
+          disabled={isClicked}
+        />
+        <LoginButton
+          clicked={isClicked}
+          type="submit"
+          disabled={isClicked}
+        >
+          {isClicked ? (
+            <ThreeDots color="#FFFFFF" />
+          ) : (
+            'Entrar'
+          )}
         </LoginButton>
       </form>
-      <p onClick={() => navigate('/cadastro')}>Não tem uma conta? Cadastre-se!</p>
+      <p onClick={() => navigate('/cadastro')}>
+        Não tem uma conta? Cadastre-se!
+      </p>
     </Container>
   );
 }
 
 const Container = styled.div`
+  background-color: #ffffff;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 68px;
   img {
+    margin-top: 68px;
     margin-bottom: 30px;
   }
   form {
@@ -64,7 +92,7 @@ const Container = styled.div`
     font-family: 'Lexend Deca', sans-serif;
     margin-top: 25px;
     font-size: 14px;
-    color: #52B6FF;
+    color: #52b6ff;
     text-decoration: underline;
     cursor: pointer;
   }
@@ -73,7 +101,7 @@ const Container = styled.div`
 const InputLogin = styled.input`
   width: 303px;
   height: 45px;
-  border: 2px solid #D5D5D5;
+  border: 2px solid #d5d5d5;
   border-radius: 5px;
   margin-bottom: 6px;
   outline: none;
@@ -81,7 +109,7 @@ const InputLogin = styled.input`
   font-size: 20px;
   padding-left: 11px;
   &::placeholder {
-    color: #DBDBDB;
+    color: #dbdbdb;
   }
 `;
 
@@ -89,9 +117,9 @@ const LoginButton = styled.button`
   height: 45px;
   border: none;
   border-radius: 5px;
-  background-color: #52B6FF;
-  color: #FFFFFF;
-  opacity: ${props => (props.clicked ? '0.7' : '1')};
+  background-color: #52b6ff;
+  color: #ffffff;
+  opacity: ${(props) => (props.clicked ? '0.7' : '1')};
   font-family: 'Lexend Deca', sans-serif;
   font-size: 21px;
   display: flex;
@@ -100,4 +128,4 @@ const LoginButton = styled.button`
   cursor: pointer;
 `;
 
-export { Container, InputLogin };
+export {Container, InputLogin}
