@@ -1,12 +1,22 @@
 import styled from "styled-components";
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
     const image = localStorage.getItem('Image')
+    const navigate = useNavigate()
+
+	function logout() {
+		localStorage.clear()
+		navigate('/')
+	}
 
     return (
         <HeaderContainer>
             <h1>TrackIt</h1>
-            <img src={image} alt="TrackIt" />
+            <div>
+				<p onClick={logout}>Logout</p>
+				<img src={image} alt="" />
+			</div>
         </HeaderContainer>
     );
 }
@@ -29,6 +39,15 @@ const HeaderContainer = styled.div`
         font-size: 39px;
         margin-left: 18px;
     }
+    div {
+		display: flex;
+		align-items: center;
+		p{
+			margin-right: 10px;
+			font-family: 'Lexend Deca', sans-serif;
+			text-decoration: underline;
+		}
+	}
     img {
         width: 51px;
         height: 51px;
