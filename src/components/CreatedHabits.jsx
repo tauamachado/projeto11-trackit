@@ -1,12 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import { weekdays } from "../constants/weekdays";
 import dump from "../assets/dump.svg";
-import { AuthContext } from "../AuthContext";
 import axios from "axios";
 
 export default function CreatedHabits({ habit, habitDelete, setHabitDelete }) {
-  const { token } = useContext(AuthContext);
+  const token = localStorage.getItem('Token')
 
   function deleteHabit() {
     const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}`;

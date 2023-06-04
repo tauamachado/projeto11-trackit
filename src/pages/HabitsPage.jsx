@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import FooterMenu from '../components/FooterMenu';
 import Header from '../components/Header';
 import { weekdays } from '../constants/weekdays';
 import axios from 'axios';
-import { AuthContext } from '../AuthContext';
 import { ThreeDots } from 'react-loader-spinner';
 import CreatedHabits from '../components/CreatedHabits';
 import Footer from '../components/FooterMenu';
@@ -13,7 +12,7 @@ export default function HabitsPage() {
   const [clickCreate, setClickCreate] = useState(false);
   const [name, setName] = useState('');
   const [days, setDays] = useState([]);
-  const { token } = useContext(AuthContext);
+  const token = localStorage.getItem('Token')
   const [isDisabled, setIsDisabled] = useState(false);
   const [habits, setHabits] = useState([]);
   const [habitDelete, setHabitDelete] = useState(false);

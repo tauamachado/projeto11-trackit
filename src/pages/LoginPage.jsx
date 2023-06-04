@@ -1,13 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { ThreeDots } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logoTrackIt from '../assets/logoTrackIt.png';
-import { AuthContext } from '../AuthContext';
 
 export default function LoginPage() {
-  const { setImage, setToken } = useContext(AuthContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,8 +22,8 @@ export default function LoginPage() {
     promise
       .then((res) => {
         setIsClicked(false);
-        setImage(res.data.image);
-        setToken(res.data.token);
+        localStorage.setItem('Image', res.data.image)
+        localStorage.setItem('Token', res.data.token)
         navigate('/hoje');
       })
       .catch((err) => {
