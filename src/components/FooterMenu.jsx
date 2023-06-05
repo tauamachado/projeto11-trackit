@@ -13,7 +13,7 @@ const FooterMenu = () => {
   return (
     <ContainerMenu data-test="menu">
       <h2 data-test="habit-link" onClick={() => navigate('/habitos')}>Hábitos</h2>
-      <div data-test="today" onClick={() => navigate('/hoje')}>
+      <div data-test="today-link" onClick={() => navigate('/hoje')}>
         <CircularProgressbar
           value={completedHabits/totalHabits*100}
           text={<tspan dominantBaseline="middle">Hoje</tspan>}

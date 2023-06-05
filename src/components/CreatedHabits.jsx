@@ -23,7 +23,7 @@ export default function CreatedHabits({ habit, habitDelete, setHabitDelete }) {
 
   return (
     <CreatedHabitsStyled data-test="habit-container">
-      <p>{habit.name}</p>
+      <p data-test="habit-name">{habit.name}</p>
       <div>
         {weekdays.map((w, index) => (
           habit.days.includes(index) ? (

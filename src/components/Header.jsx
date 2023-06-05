@@ -15,7 +15,7 @@ export default function Header() {
             <h1>TrackIt</h1>
             <div>
 				<p onClick={logout}>Logout</p>
-				<img src={image} alt="" />
+				<img src={image} alt="" data-test="avatar"/>
 			</div>
         </HeaderContainer>
     );
