@@ -36,6 +36,7 @@ export default function RegisterPage() {
       <Logo src={logo} alt="" />
       <form onSubmit={handleRegister}>
         <InputLogin
+          data-test="email-input"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           type="email"
@@ -44,6 +45,7 @@ export default function RegisterPage() {
           disabled={isRegistering}
         />
         <InputLogin
+          data-test="password-input"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
@@ -52,6 +54,7 @@ export default function RegisterPage() {
           disabled={isRegistering}
         />
         <InputLogin
+          data-test="user-name-input"
           value={name}
           onChange={(e) => setName(e.target.value)}
           type="text"
@@ -60,6 +63,7 @@ export default function RegisterPage() {
           disabled={isRegistering}
         />
         <InputLogin
+          data-test="user-image-input"
           value={image}
           onChange={(e) => setImage(e.target.value)}
           type="url"
@@ -67,11 +71,11 @@ export default function RegisterPage() {
           required
           disabled={isRegistering}
         />
-        <RegisterButton type="submit" disabled={isRegistering}>
+        <RegisterButton data-test="signup-btn" type="submit" disabled={isRegistering}>
           {isRegistering ? <ThreeDots color="#FFFFFF" /> : 'Cadastrar'}
         </RegisterButton>
       </form>
-      <p onClick={() => navigate('/')}>Já tem uma conta? Faça login!</p>
+      <p data-test="login-link" onClick={() => navigate('/')}>Já tem uma conta? Faça login!</p>
     </Container>
   );
 }

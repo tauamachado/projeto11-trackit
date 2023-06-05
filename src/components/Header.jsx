@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
     const image = localStorage.getItem('Image')
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
 	function logout() {
-		localStorage.clear()
-		navigate('/')
+		localStorage.clear();
+		navigate('/');
 	}
 
     return (
-        <HeaderContainer>
+        <HeaderContainer data-test="header">
             <h1>TrackIt</h1>
             <div>
 				<p onClick={logout}>Logout</p>

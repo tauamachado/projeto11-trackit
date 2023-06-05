@@ -27,13 +27,13 @@ export default function CreatedHabits({ habit, habitDelete, setHabitDelete }) {
       <div>
         {weekdays.map((w, index) => (
           habit.days.includes(index) ? (
-            <DaysButton key={index} selected>{w[0]}</DaysButton>
+            <DaysButton key={index} selected data-test="habit-day">{w[0]}</DaysButton>
           ) : (
-            <DaysButton key={index}>{w[0]}</DaysButton>
+            <DaysButton key={index} data-test="habit-day">{w[0]}</DaysButton>
           )
         ))}
       </div>
-      <img src={dump} alt="" onClick={deleteHabit} />
+      <img src={dump} alt="" onClick={deleteHabit} data-test="habit-delete-btn" />
     </CreatedHabitsStyled>
   );
 }

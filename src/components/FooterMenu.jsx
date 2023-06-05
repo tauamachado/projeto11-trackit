@@ -11,9 +11,9 @@ const FooterMenu = () => {
 	const completedHabits = habitsToday.filter(h => h.done).length
 
   return (
-    <ContainerMenu>
-      <h2 onClick={() => navigate('/habitos')}>Hábitos</h2>
-      <div onClick={() => navigate('/hoje')}>
+    <ContainerMenu data-test="menu">
+      <h2 data-test="habit-link" onClick={() => navigate('/habitos')}>Hábitos</h2>
+      <div data-test="today" onClick={() => navigate('/hoje')}>
         <CircularProgressbar
           value={completedHabits/totalHabits*100}
           text={<tspan dominantBaseline="middle">Hoje</tspan>}
@@ -30,7 +30,7 @@ const FooterMenu = () => {
           })}
         />
       </div>
-      <h2 onClick={() => navigate('/historico')}>Histórico</h2>
+      <h2 data-test="history-link" onClick={() => navigate('/historico')}>Histórico</h2>
     </ContainerMenu>
   );
 };

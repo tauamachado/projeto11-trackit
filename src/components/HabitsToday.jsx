@@ -27,13 +27,13 @@ export default function HabitsToday({habit}) {
   }
 
   return (
-    <Habit done={habit.done} currentSequence={habit.currentSequence} highestSequence={habit.highestSequence}>
+    <Habit data-test="today-habit-container" done={habit.done} currentSequence={habit.currentSequence} highestSequence={habit.highestSequence}>
       <div>
-        <h1>{habit.name}</h1>
-        <p>Sequência atual: <span>{habit.currentSequence} dias</span></p>
-				<p>Seu recorde: <span>{habit.highestSequence} dias</span></p>
+        <h1 data-test="today-habit-name">{habit.name}</h1>
+        <p data-test="today-habit-sequence">Sequência atual: <span>{habit.currentSequence} dias</span></p>
+				<p data-test="today-habit-record">Seu recorde: <span>{habit.highestSequence} dias</span></p>
       </div>
-      <button onClick={check}>
+      <button data-test="today-habit-check-btn" onClick={check}>
         <img src={success} alt="" />
       </button>
     </Habit>
