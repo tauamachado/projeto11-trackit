@@ -68,7 +68,7 @@ export default function LoginPage() {
             <AiOutlineEye onClick={() => setShowPassword(!showPassword)} />
           )}
         </div>
-        <LoginButton data-test="password-input" clicked={isClicked} type="submit" disabled={isClicked}>
+        <LoginButton data-test="login-btn" clicked={isClicked} type="submit" disabled={isClicked}>
           {isClicked ? <ThreeDots color="#FFFFFF" /> : 'Entrar'}
         </LoginButton>
       </form>
